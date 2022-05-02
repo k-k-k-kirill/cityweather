@@ -8,8 +8,14 @@ const startServer = async () => {
 
   await loaders({ expressApp: app });
 
-  app.listen(config.SERVER_PORT, () => {
-    console.log(`App is listening on port ${config.SERVER_PORT}`);
+  app.listen(config.NODE_LOCAL_PORT, () => {
+    console.log(
+      `App is listening on port ${
+        config.NODE_ENV === "development"
+          ? config.NODE_LOCAL_PORT
+          : config.NODE_DOCKER_PORT
+      }`
+    );
   });
 };
 
