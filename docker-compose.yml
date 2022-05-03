@@ -10,26 +10,25 @@ services:
       - $NODE_LOCAL_PORT:$NODE_DOCKER_PORT
     env_file: ./.env
     environment:
-      - DB_HOST=mysql_server
-      - DB_USER=$MYSQL_USER
-      - DB_PASSWORD=$MYSQL_ROOT_PASSWORD
-      - DB_NAME=$MYSQL_DB_NAME
-      - DB_PORT=$MYSQL_PORT
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
     depends_on:
-      - mysql_server
+      - mysql
 
-  mysql_server:
+  mysql:
     image: mysql:8.0
     restart: unless-stopped
-    ports:
-      - $MYSQLDB_LOCAL_PORT:$MYSQLDB_DOCKER_PORT
+    command: --default-authentication-plugin=mysql_native_password
     env_file: ./.env
     environment:
-      - MYSQL_DATABASE=cityweather
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=root
-      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=$MYSQL_USER
+      - MYSQL_PASSWORD=$MYSQL_PASSWORD
+      - MYSQL_DATABASE=$MYSQL_DATABASE
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
     volumes:
-      - db:/var/lib/mysql
+      - database:/var/lib/mysql
 volumes:
-  db:
+  database:
