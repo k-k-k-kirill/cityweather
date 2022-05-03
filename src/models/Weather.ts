@@ -6,10 +6,10 @@ const Weather = db.define("weather", {
     type: DataTypes.STRING,
   },
   coordinates: {
-    type: DataTypes.GEOGRAPHY("POINT"),
+    type: DataTypes.GEOMETRY("POINT"),
     allowNull: false,
   },
-  temperature: {
+  temp: {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
@@ -17,5 +17,13 @@ const Weather = db.define("weather", {
     type: DataTypes.FLOAT,
   },
 });
+
+(async () => {
+  try {
+    await db.sync();
+  } catch (err) {
+    console.log(err);
+  }
+})();
 
 export default Weather;

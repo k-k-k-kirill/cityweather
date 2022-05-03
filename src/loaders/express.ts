@@ -5,8 +5,15 @@ import router from "../api/index";
 import cookieParser from "cookie-parser";
 import NotFoundError from "../errors/NotFoundError";
 import errorHandler from "../middlewares/errorHandler";
+import fileUpload from "express-fileupload";
 
 export default (app: Application) => {
+  app.use(
+    fileUpload({
+      createParentPath: true,
+    })
+  );
+
   app.use(express.json());
   app.enable("trust proxy");
 
