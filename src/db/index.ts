@@ -8,5 +8,6 @@ export default new Sequelize(
   {
     host: config.NODE_ENV === "development" ? "localhost" : config.MYSQL_HOST,
     dialect: "mysql",
+    logging: config.NODE_ENV === "production" ? false : console.log,
   }
 );

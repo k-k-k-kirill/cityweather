@@ -1,56 +1,70 @@
 import { UploadedFile } from "express-fileupload";
-import WeatherModel from "../models/Weather";
+import WeatherRepository from "../repositories/Weather";
 import Upload from "./Upload";
-import db from "../db";
-import { Op } from "sequelize";
+import {
+  WeatherData,
+  WeatherRecord,
+  Point,
+  TemperatureUnits,
+} from "../types/types";
 
 class Weather {
-  populateFromFile = async (file: UploadedFile) => {
+  populateFromFile = async (file: UploadedFile): Promise<void> => {
     const uploadService = new Upload();
-    const uploadRecords = uploadService.convertToJSON(file);
+    const weatherInput = uploadService.convertToJSON(file);
+    const weatherRepository = new WeatherRepository();
+    const weatherRecords = this.getRecordsFromInput(weatherInput);
 
-    uploadRecords.map(async (item: any) => {
-      try {
-        const point = { type: "Point", coordinates: [item.lon, item.lat] };
+    await weatherRepository.createFromArray(weatherRecords);
+  };
 
-        await WeatherModel.create({
-          city: item.city,
-          coordinates: point,
-          temp: item.temp,
-          humidity: item.humidity,
-        });
-      } catch (err) {
-        console.log(err);
-      }
+  getRecordsFromInput = (input: WeatherData[]): WeatherRecord[] => {
+    return input.map((item: WeatherData) => {
+      const point: Point = { type: "Point", coordinates: [item.lon, item.lat] };
+
+      return {
+        city: item.city,
+        coordinates: point,
+        temp: item.temp,
+        humidity: item.humidity,
+      };
     });
   };
 
-  getAll = async () => {
-    try {
-      return await WeatherModel.findAll();
-    } catch (err) {
-      console.log(err);
-    }
+  getAll = async (unit = TemperatureUnits.Celsius): Promise<WeatherData[]> => {
+    const weatherRepository = new WeatherRepository();
+    const weatherRecords = await weatherRepository.all();
+    return this.normalizeResponse(weatherRecords, unit);
   };
 
-  findByCoordinates = async (lon: any, lat: any, radius: any) => {
-    try {
-      const location = db.literal(`ST_GeomFromText('POINT(${lon} ${lat})')`);
-      const distance = db.fn(
-        "ST_Distance_Sphere",
-        db.col("coordinates"),
-        location
-      );
+  findByCoordinates = async (
+    lon: any,
+    lat: any,
+    radius: any,
+    unit = TemperatureUnits.Celsius
+  ): Promise<WeatherData[]> => {
+    const weatherRepository = new WeatherRepository();
+    const weatherRecords = await weatherRepository.findWithinRadius(
+      lon,
+      lat,
+      radius
+    );
 
-      const inRadius = await WeatherModel.findAll({
-        order: distance,
-        where: db.where(distance, { [Op.lte]: radius }),
-      });
+    return this.normalizeResponse(weatherRecords, unit);
+  };
 
-      return inRadius;
-    } catch (err) {
-      console.log(err);
-    }
+  normalizeResponse = (records: any, unit: string): WeatherData[] => {
+    return records.map((item: any) => {
+      return {
+        city: item.city.name,
+        lat: item.coordinates.coordinates[1],
+        lon: item.coordinates.coordinates[0],
+        temp:
+          unit === TemperatureUnits.Celsius ? item.temp : item.temp * 1.8 + 32,
+        humidity: item.humidity,
+        unit: unit.toUpperCase(),
+      };
+    });
   };
 }
 

@@ -1,10 +1,8 @@
-import { Sequelize, DataTypes, Model } from "sequelize";
+import { DataTypes } from "sequelize";
 import db from "../db";
+import City from "./City";
 
 const Weather = db.define("weather", {
-  city: {
-    type: DataTypes.STRING,
-  },
   coordinates: {
     type: DataTypes.GEOMETRY("POINT"),
     allowNull: false,
@@ -18,12 +16,7 @@ const Weather = db.define("weather", {
   },
 });
 
-(async () => {
-  try {
-    await db.sync();
-  } catch (err) {
-    console.log(err);
-  }
-})();
+Weather.belongsTo(City);
+City.hasMany(Weather);
 
 export default Weather;
