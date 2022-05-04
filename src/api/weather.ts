@@ -38,7 +38,7 @@ weather.post(
     })
     .withMessage("Weather data file was not provided.")
     .custom((value, { req }) => {
-      if (req.files.weather.mimetype === "application/json") {
+      if (req.files.weather.mimetype === "application/json" || req.files.weather.mimetype === "application/octet-stream") {
         return true;
       } else {
         return false;
