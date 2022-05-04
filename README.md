@@ -57,7 +57,7 @@ Accepts optional query parameter "unit" which can be "C" or "F". Default value i
 
 **Example response:**
 
-``
+```
 [  
     {  
         "city": "Helsinki",  
@@ -68,7 +68,7 @@ Accepts optional query parameter "unit" which can be "C" or "F". Default value i
         "unit": "F"  
     }  
 ]
-``
+```
 
 #### [POST] /weather
 
