@@ -58,16 +58,16 @@ Accepts optional query parameter "unit" which can be "C" or "F". Default value i
 **Example response:**
 
 ``
-[
-    {
-        "city": "Helsinki",
-        "lat": 60.1676,
-        "lon": 24.9421,
-        "temp": 44.6,
-        "humidity": 40.5,
-        "unit": "F"
-    }
-]
+[\
+    {\
+        "city": "Helsinki",\
+        "lat": 60.1676,\
+        "lon": 24.9421,\
+        "temp": 44.6,\
+        "humidity": 40.5,\
+        "unit": "F"\
+    }\
+]\
 ``
 
 #### [POST] /weather
