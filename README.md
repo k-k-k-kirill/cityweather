@@ -26,18 +26,18 @@ Retrieves all existing weather records. Accepts optional query parameter "unit" 
 
 **Example response:**
 
-``
-[
-    {
-        "city": "Helsinki",
-        "lat": 60.1676,
-        "lon": 24.9421,
-        "temp": 44.6,
-        "humidity": 40.5,
-        "unit": "F"
-    }
-]
-``
+```
+[  
+    {  
+        "city": "Helsinki",  
+        "lat": 60.1676,  
+        "lon": 24.9421,  
+        "temp": 44.6,  
+        "humidity": 40.5,  
+        "unit": "F"  
+    }  
+]  
+```
 
 #### [GET] /weather/search
 
@@ -79,17 +79,17 @@ Accepts optional query parameter "unit" which can be "C" or "F". Default value i
 **Description**
 
 Parses JSON file containing weather records in following format and saves them to DB:
-``
-[
-  {
-    "city": "Helsinki",
-    "lat": "60.1676",
-    "lon": "24.9421",
-    "temp": "7.0",
-    "humidity": "40.5"
-    },
+```
+[  
+  {  
+    "city": "Helsinki",  
+    "lat": "60.1676",  
+    "lon": "24.9421",  
+    "temp": "7.0",  
+    "humidity": "40.5"  
+    },  
 ]
-``
+```
 
 **Usage example:**
 
@@ -97,16 +97,16 @@ Parses JSON file containing weather records in following format and saves them t
 
 **Example response:**
 
-``
-{
-    "message": "File data saved to DB.",
-    "data": {
-        "name": "weather.json",
-        "mimetype": "application/json",
-        "size": 492
-    }
-}
-``
+```
+{  
+    "message": "File data saved to DB.",  
+    "data": {  
+        "name": "weather.json",  
+        "mimetype": "application/json",  
+        "size": 492  
+    }  
+}  
+```
 
 ### Note
 
